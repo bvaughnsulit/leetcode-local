@@ -1,12 +1,18 @@
 import fetch from 'node-fetch'
 import * as dotenv from 'dotenv'
+import { setTimeout } from 'timers/promises'
+import { Question, getQuestion } from './leetcodeApi'
 
 dotenv.config()
 
+type Submission = {
+  state: string
+}
+
 const submitCode = async (
   slug: string,
+  id: string,
   code: string,
-  id?: string
 ): Promise<string> => {
 
   const url = `https://leetcode.com/problems/${slug}/submit/`
@@ -42,8 +48,61 @@ const submitCode = async (
   }
 }
 
+const checkSubmission = async (submissionId: string): Promise<Submission> => {
+
+  const url = `https://leetcode.com/submissions/detail/${submissionId}/check/`
+  const request = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Referer': 'https://leetcode.com/',
+      'cookie': process.env['COOKIE'] ?? '',
+      'x-csrftoken': process.env['CSRF_TOKEN'] ??  ''
+    }
+  }
+
+  try {
+    const response = await fetch(url, request)
+    if (response.status === 200) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      const data = await response.text()
+      console.log(request, data)
+      throw `${response.status}`
+    }
+  }
+  catch (e) {
+    console.log(e)
+    throw 'request failed'
+  }
+}
+
+
+const getSubmissionResult = async (submissionId: string): Promise<any> => {
+  return new Promise(async (resolve, reject) => {
+    let attempts = 0
+    let results: Submission = { state: '' }
+
+    while (attempts < 10 && results.state !== 'SUCCESS'){
+      results = await checkSubmission(submissionId)
+      console.log('...')
+      await setTimeout(500)
+      attempts++
+    }
+
+    if (results.state === 'SUCCESS'){
+      resolve(results)
+    } else {
+      reject(results)
+    }
+  })
+}
+
 
 ;(async () => {
+  console.log('starting script...')
   const arg = process.argv[2] // skip system args
   if (arg !== undefined && arg.length > 0) { 
     const slug = arg.trim()
@@ -57,10 +116,10 @@ const submitCode = async (
         code += element.toString()
       }
     }
-    const id = '121'
-    console.log(code)
-    const submissionId = await submitCode(slug, code, id)
-    console.log(submissionId)
+    const question: Question = await getQuestion(slug)
+    const submissionId = await submitCode(slug, question.questionId, code)
+    const submissionDetails = await getSubmissionResult(submissionId)
+    console.log(submissionDetails)
     return
   }
   else {
