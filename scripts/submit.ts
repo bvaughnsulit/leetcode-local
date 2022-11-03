@@ -2,6 +2,8 @@ import fetch from 'node-fetch'
 import * as dotenv from 'dotenv'
 import { setTimeout } from 'timers/promises'
 import { Question, getQuestion } from './leetcodeApi'
+import fs from 'fs'
+import path from 'path'
 
 dotenv.config()
 
@@ -100,22 +102,28 @@ const getSubmissionResult = async (submissionId: string): Promise<any> => {
   })
 }
 
+const getFile = (relPath: string) => {
+  const fullPath = path.resolve(__dirname, relPath + '.ts')
+  let text = fs.readFileSync(fullPath).toString()
+  // remove exports by matching 'export' preceded by a newline, and removing
+  // that and all following text
+  text = text.replace(/\n\s*export .*/,'')
+  console.log(text)
+  return text
+}
+
 
 ;(async () => {
   console.log('starting script...')
+
   const arg = process.argv[2] // skip system args
+
   if (arg !== undefined && arg.length > 0) { 
     const slug = arg.trim()
-    const module = await import('../src/' + slug)
-    type ModuleType = typeof module
-    const exports: ModuleType = module
 
-    let code = ''
-    for (const element of Object.values(exports)) {
-      if (typeof element === 'function') {
-        code += element.toString()
-      }
-    }
+    const relPath = '../src/' + slug
+    const code = getFile(relPath)
+
     const question: Question = await getQuestion(slug)
     const submissionId = await submitCode(slug, question.questionId, code)
     const submissionDetails = await getSubmissionResult(submissionId)
