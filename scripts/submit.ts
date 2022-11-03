@@ -1,64 +1,66 @@
-// import fetch from 'node-fetch'
+import fetch from 'node-fetch'
 import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-// const getQuestion = async (slug: string): Promise<Question> => {
-//   
-//   const body = `{
-//     question(titleSlug: "${slug}") {
-//       codeSnippets {
-//         lang
-//         langSlug
-//         code
-//         __typename
-//       }
-//       content
-//       difficulty
-//       envInfo
-//       exampleTestcases
-//       sampleTestCase
-//       questionId
-//       solution {
-//         id
-//         canSeeDetail
-//         paidOnly
-//         hasVideoSolution
-//         paidOnlyVideo
-//         __typename
-//       }
-//       status
-//       title
-//       titleSlug
-//     }
-//   }` 
-//
-//   const response = await fetch('https://leetcode.com/graphql', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Referer': 'https://leetcode.com/',
-//       'Cookie': process.env['COOKIE'] ?? '',
-//       'x-csrf-token': process.env['X-CSRF_TOKEN'] ??  ''
-//     },
-//     body: JSON.stringify({
-//       query: body,
-//       variables: {}
-//     })
-//   })
-//   
-//   if (response.status === 200) {
-//     const data = await response.json()
-//     return data.data.question
-//   } else { throw `${response.status} ${response.statusText}` }
-// }
+const submitCode = async (
+  slug: string,
+  code: string,
+  id?: string
+): Promise<string> => {
+
+  const url = `https://leetcode.com/problems/${slug}/submit/`
+  const request = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Referer': 'https://leetcode.com/',
+      'cookie': process.env['COOKIE'] ?? '',
+      'x-csrftoken': process.env['CSRF_TOKEN'] ??  ''
+    },
+    body: JSON.stringify({
+      question_id: id || '',
+      lang: "typescript",
+      typed_code: code,
+    })
+  }
+
+  try {
+    const response = await fetch(url, request)
+    if (response.status === 200) {
+      const data = await response.json()
+      return data.submission_id
+    } else {
+      const data = await response.text()
+      console.log(request, data)
+      throw `${response.status}`
+    }
+  }
+  catch (e) {
+    console.log(e)
+    throw 'request failed'
+  }
+}
+
 
 ;(async () => {
   const arg = process.argv[2] // skip system args
   if (arg !== undefined && arg.length > 0) { 
     const slug = arg.trim()
-    const code = await import('../src/' + slug)
-    console.log(code, slug)
+    const module = await import('../src/' + slug)
+    type ModuleType = typeof module
+    const exports: ModuleType = module
+
+    let code = ''
+    for (const element of Object.values(exports)) {
+      if (typeof element === 'function') {
+        code += element.toString()
+      }
+    }
+    const id = '121'
+    console.log(code)
+    const submissionId = await submitCode(slug, code, id)
+    console.log(submissionId)
     return
   }
   else {
