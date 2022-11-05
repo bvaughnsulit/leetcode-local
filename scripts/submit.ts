@@ -110,9 +110,14 @@ const getSubmissionResult = async (submissionId: string): Promise<Submission> =>
 const getFile = (relPath: string) => {
   const fullPath = path.resolve(__dirname, relPath + '.ts')
   let text = fs.readFileSync(fullPath).toString()
+
   // remove exports by matching 'export' preceded by a newline, and removing
   // that and all following text
-  text = text.replace(/\n\s*export .*/,'')
+  text = text.replace(/\s*import .*\n/,'')
+
+  // remove imports
+  text = text.replace(/\s*export .*/,'')
+  console.log(text)
   return text
 }
 
