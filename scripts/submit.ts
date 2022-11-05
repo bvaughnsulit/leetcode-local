@@ -82,12 +82,12 @@ const checkSubmission = async (submissionId: string): Promise<Submission> => {
 }
 
 
-const getSubmissionResult = async (submissionId: string): Promise<any> => {
+const getSubmissionResult = async (submissionId: string): Promise<Submission> => {
   return new Promise(async (resolve, reject) => {
     let attempts = 0
     let results: Submission = { state: '' }
-
-    while (attempts < 10 && results.state !== 'SUCCESS'){
+    const maxAttempts = 20
+    while (attempts < maxAttempts && results.state !== 'SUCCESS'){
       results = await checkSubmission(submissionId)
       console.log('...')
       await setTimeout(500)
@@ -97,7 +97,12 @@ const getSubmissionResult = async (submissionId: string): Promise<any> => {
     if (results.state === 'SUCCESS'){
       resolve(results)
     } else {
+      console.log(`submission ${submissionId} not succesful`)
       reject(results)
+    }
+
+    if (results.state !== 'SUCCESS'){
+      console.log(`error retrieving results for submission ${submissionId}`)
     }
   })
 }
@@ -105,13 +110,19 @@ const getSubmissionResult = async (submissionId: string): Promise<any> => {
 const getFile = (relPath: string) => {
   const fullPath = path.resolve(__dirname, relPath + '.ts')
   let text = fs.readFileSync(fullPath).toString()
+
   // remove exports by matching 'export' preceded by a newline, and removing
   // that and all following text
-  text = text.replace(/\n\s*export .*/,'')
-  console.log(text)
+  text = text.replace(/\s*import .*\n/,'')
+
+  // remove imports
+  text = text.replace(/\s*export .*/,'')
   return text
 }
 
+const displayResults = (submissionDetails: Submission): void => {
+  console.log(submissionDetails)
+}
 
 ;(async () => {
   console.log('starting script...')
@@ -127,7 +138,7 @@ const getFile = (relPath: string) => {
     const question: Question = await getQuestion(slug)
     const submissionId = await submitCode(slug, question.questionId, code)
     const submissionDetails = await getSubmissionResult(submissionId)
-    console.log(submissionDetails)
+    displayResults(submissionDetails)
     return
   }
   else {
