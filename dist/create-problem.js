@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getQuestion = void 0;
+exports.createProblem = exports.getQuestion = void 0;
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const html_to_text_1 = require("html-to-text");
@@ -43,10 +43,9 @@ test('', () => {
 `;
     fs_1.default.writeFileSync(path_1.default.join(dir, question.titleSlug + '.test.ts'), fileContents, { flag: 'wx' });
 };
-(async () => {
-    const arg = process.argv[2]; // skip system args
-    if (arg !== undefined && arg.length > 0) {
-        const slug = arg.trim();
+const createProblem = async (problem) => {
+    if (problem.length > 0) {
+        const slug = problem.trim();
         const question = await (0, leetcodeApi_1.getQuestion)(slug);
         createQuestionFile(question, dir);
         createQuestionTestFile(question, dir);
@@ -57,4 +56,5 @@ test('', () => {
         console.log('please provide url slug for problem');
         return;
     }
-})();
+};
+exports.createProblem = createProblem;

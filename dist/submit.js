@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.submit = void 0;
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const dotenv = __importStar(require("dotenv"));
 const promises_1 = require("timers/promises");
@@ -130,11 +131,10 @@ const getFile = (relPath) => {
 const displayResults = (submissionDetails) => {
     console.log(submissionDetails);
 };
-(async () => {
+const submit = async (problem) => {
     console.log('starting script...');
-    const arg = process.argv[2]; // skip system args
-    if (arg !== undefined && arg.length > 0) {
-        const slug = arg.trim();
+    if (problem.length > 0) {
+        const slug = problem.trim();
         const relPath = '../src/' + slug;
         const code = getFile(relPath);
         const question = await (0, leetcodeApi_1.getQuestion)(slug);
@@ -147,4 +147,5 @@ const displayResults = (submissionDetails) => {
         console.log('please provide url slug for problem');
         return;
     }
-})();
+};
+exports.submit = submit;

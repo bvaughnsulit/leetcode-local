@@ -124,13 +124,11 @@ const displayResults = (submissionDetails: Submission): void => {
   console.log(submissionDetails)
 }
 
-;(async () => {
+const submit = async (problem: string) => {
   console.log('starting script...')
 
-  const arg = process.argv[2] // skip system args
-
-  if (arg !== undefined && arg.length > 0) { 
-    const slug = arg.trim()
+  if (problem.length > 0) { 
+    const slug = problem.trim()
 
     const relPath = '../src/' + slug
     const code = getFile(relPath)
@@ -145,4 +143,6 @@ const displayResults = (submissionDetails: Submission): void => {
     console.log('please provide url slug for problem')
     return
   }
-})()
+}
+
+export { submit }

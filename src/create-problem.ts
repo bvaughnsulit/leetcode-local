@@ -55,10 +55,9 @@ test('', () => {
   )
 }
 
-(async () => {
-  const arg = process.argv[2] // skip system args
-  if (arg !== undefined && arg.length > 0) { 
-    const slug = arg.trim()
+const createProblem = async (problem: string) => {
+  if (problem.length > 0) { 
+    const slug = problem.trim()
     const question: Question = await getQuestion(slug)
     createQuestionFile(question, dir)
     createQuestionTestFile(question, dir)
@@ -69,7 +68,7 @@ test('', () => {
     console.log('please provide url slug for problem')
     return
   }
-})()
+}
 
 
-export { Question, getQuestion }
+export { Question, getQuestion, createProblem }
