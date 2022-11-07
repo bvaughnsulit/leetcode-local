@@ -1,3 +1,4 @@
+"use strict";
 // global.MyGlobalClass = class MyGlobalClass {
 //   myProp: string
 //   constructor(myArg: string){
@@ -8,12 +9,9 @@
 //     return 'called method myMethod with ' + x
 //   }
 // }
-
 global.ListNode = class ListNode {
-  val: number
-  next: ListNode | null
-  constructor(val?: number, next?: ListNode | null) {
-    this.val = (val===undefined ? 0 : val)
-    this.next = (next===undefined ? null : next)
-  }
-}
+    constructor(val, next) {
+        this.val = (val === undefined ? 0 : val);
+        this.next = (next === undefined ? null : next);
+    }
+};
