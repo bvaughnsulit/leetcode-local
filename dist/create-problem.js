@@ -10,7 +10,7 @@ const html_to_text_1 = require("html-to-text");
 const leetcodeApi_1 = require("./leetcodeApi");
 Object.defineProperty(exports, "getQuestion", { enumerable: true, get: function () { return leetcodeApi_1.getQuestion; } });
 const rootDir = process.cwd() || '';
-const dir = path_1.default.resolve(rootDir, '/src');
+const dir = path_1.default.resolve(rootDir, './src');
 const createQuestionFile = (question, dir) => {
     // assuming that we're always creating typescript files
     let snippet = question.codeSnippets.find(e => e.lang === "TypeScript");

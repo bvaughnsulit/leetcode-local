@@ -4,7 +4,7 @@ import { convert } from 'html-to-text'
 import { Question, getQuestion } from './leetcodeApi'
 
 const rootDir = process.cwd() || ''
-const dir = path.resolve(rootDir, '/src')
+const dir = path.resolve(rootDir, './src')
 
 
 const createQuestionFile = (question: Question, dir: string) => {

@@ -34,6 +34,8 @@ const leetcodeApi_1 = require("./leetcodeApi");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 dotenv.config();
+const rootDir = process.cwd() || '';
+const dir = path_1.default.resolve(rootDir, './src/');
 const submitCode = async (slug, id, code) => {
     const url = `https://leetcode.com/problems/${slug}/submit/`;
     const request = {
@@ -118,9 +120,8 @@ const getSubmissionResult = async (submissionId) => {
         }
     });
 };
-const getFile = (relPath) => {
-    const fullPath = path_1.default.resolve(__dirname, relPath + '.ts');
-    let text = fs_1.default.readFileSync(fullPath).toString();
+const getFile = (filePath) => {
+    let text = fs_1.default.readFileSync(filePath).toString();
     // remove exports by matching 'export' preceded by a newline, and removing
     // that and all following text
     text = text.replace(/\s*import .*\n/, '');
@@ -135,8 +136,7 @@ const submit = async (problem) => {
     console.log('starting script...');
     if (problem.length > 0) {
         const slug = problem.trim();
-        const relPath = '../src/' + slug;
-        const code = getFile(relPath);
+        const code = getFile(dir + slug + '.ts');
         const question = await (0, leetcodeApi_1.getQuestion)(slug);
         const submissionId = await submitCode(slug, question.questionId, code);
         const submissionDetails = await getSubmissionResult(submissionId);

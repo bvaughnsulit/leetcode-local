@@ -7,6 +7,9 @@ import path from 'path'
 
 dotenv.config()
 
+const rootDir = process.cwd() || ''
+const dir = path.resolve(rootDir, './src/')
+
 type Submission = {
   state: string
 }
@@ -107,9 +110,8 @@ const getSubmissionResult = async (submissionId: string): Promise<Submission> =>
   })
 }
 
-const getFile = (relPath: string) => {
-  const fullPath = path.resolve(__dirname, relPath + '.ts')
-  let text = fs.readFileSync(fullPath).toString()
+const getFile = (filePath: string) => {
+  let text = fs.readFileSync(filePath).toString()
 
   // remove exports by matching 'export' preceded by a newline, and removing
   // that and all following text
@@ -130,8 +132,7 @@ const submit = async (problem: string) => {
   if (problem.length > 0) { 
     const slug = problem.trim()
 
-    const relPath = '../src/' + slug
-    const code = getFile(relPath)
+    const code = getFile(dir + slug + '.ts')
 
     const question: Question = await getQuestion(slug)
     const submissionId = await submitCode(slug, question.questionId, code)
