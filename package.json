@@ -13,6 +13,7 @@
   },
   "author": "",
   "license": "ISC",
+  "files": ["dist","*.d.ts"],
   "dependencies": {
     "dotenv": "^16.0.3",
     "node-fetch": "^2.6.7"

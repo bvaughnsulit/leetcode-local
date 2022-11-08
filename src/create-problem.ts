@@ -18,7 +18,9 @@ const createQuestionFile = (question: Question, dir: string) => {
   }
 
   const fileContents =
-`/**
+`
+import 'leetcode-local/globals'
+/**
 ${question.questionId}. ${question.title}
 https://leetcode.com/problems/${question.titleSlug}
 
@@ -41,7 +43,8 @@ export {}
 
 const createQuestionTestFile = (question: Question, dir: string) => {
   const fileContents =
-`import {} from './${question.titleSlug}'
+`import 'leetcode-local/globals'
+import {} from './${question.titleSlug}'
 
 test('', () => {
   
