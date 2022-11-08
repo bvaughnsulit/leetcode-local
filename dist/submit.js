@@ -138,6 +138,7 @@ const submit = async (problem) => {
         const slug = problem.trim();
         const code = getFile(`${dir}/${slug}.ts`);
         const question = await (0, leetcodeApi_1.getQuestion)(slug);
+        console.log(question);
         const submissionId = await submitCode(slug, question.questionId, code);
         const submissionDetails = await getSubmissionResult(submissionId);
         displayResults(submissionDetails);
