@@ -3,7 +3,7 @@ import fs from 'fs'
 import { convert } from 'html-to-text'
 import { Question, getQuestion } from './leetcodeApi'
 
-const rootDir = process.env['INIT_CWD'] || ''
+const rootDir = process.cwd() || ''
 const dir = path.resolve(rootDir, '/src')
 
 
