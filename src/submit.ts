@@ -135,6 +135,7 @@ const submit = async (problem: string) => {
     const code = getFile(`${dir}/${slug}.ts`)
 
     const question: Question = await getQuestion(slug)
+    console.log(question)
     const submissionId = await submitCode(slug, question.questionId, code)
     const submissionDetails = await getSubmissionResult(submissionId)
     displayResults(submissionDetails)
