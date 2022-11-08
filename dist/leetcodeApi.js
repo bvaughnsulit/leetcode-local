@@ -59,6 +59,7 @@ const getQuestion = async (slug) => {
     }
   }`;
     try {
+        console.log('requesting question');
         const response = await (0, node_fetch_1.default)('https://leetcode.com/graphql', {
             method: 'POST',
             headers: {
