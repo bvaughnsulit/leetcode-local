@@ -1,11 +1,14 @@
 import fetch from 'node-fetch'
 import * as dotenv from 'dotenv'
 import { setTimeout } from 'timers/promises'
-import { Question, getQuestion } from './leetcodeApi'
+import { Question, getQuestion } from './leetcode-api'
 import fs from 'fs'
 import path from 'path'
 
 dotenv.config()
+
+const rootDir = process.cwd() || ''
+const dir = path.resolve(rootDir, './src/')
 
 type Submission = {
   state: string
@@ -107,9 +110,8 @@ const getSubmissionResult = async (submissionId: string): Promise<Submission> =>
   })
 }
 
-const getFile = (relPath: string) => {
-  const fullPath = path.resolve(__dirname, relPath + '.ts')
-  let text = fs.readFileSync(fullPath).toString()
+const getFile = (filePath: string) => {
+  let text = fs.readFileSync(filePath).toString()
 
   // remove exports by matching 'export' preceded by a newline, and removing
   // that and all following text
@@ -124,16 +126,13 @@ const displayResults = (submissionDetails: Submission): void => {
   console.log(submissionDetails)
 }
 
-;(async () => {
+const submit = async (problem: string) => {
   console.log('starting script...')
 
-  const arg = process.argv[2] // skip system args
+  if (problem.length > 0) { 
+    const slug = problem.trim()
 
-  if (arg !== undefined && arg.length > 0) { 
-    const slug = arg.trim()
-
-    const relPath = '../src/' + slug
-    const code = getFile(relPath)
+    const code = getFile(`${dir}/${slug}.ts`)
 
     const question: Question = await getQuestion(slug)
     const submissionId = await submitCode(slug, question.questionId, code)
@@ -145,4 +144,6 @@ const displayResults = (submissionDetails: Submission): void => {
     console.log('please provide url slug for problem')
     return
   }
-})()
+}
+
+export { submit }

@@ -1,11 +1,25 @@
 {
   "name": "leetcode-local",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "bin": {
+    "leetcode-local": "./dist/bin/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "exports": {
+    "./globals": "./dist/globals.js"
+  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "@types/html-to-text": "^8.1.1",
+    "@types/node": "^18.11.9",
+    "@types/node-fetch": "^2.6.2"
+  }
 }
