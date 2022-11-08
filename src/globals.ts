@@ -1,4 +1,4 @@
-global.ListNode = class ListNode {
+var ListNode = class ListNode {
   val: number
   next: ListNode | null
   constructor(val?: number, next?: ListNode | null) {
@@ -7,3 +7,4 @@ global.ListNode = class ListNode {
   }
 }
 
+global.ListNode = ListNode
