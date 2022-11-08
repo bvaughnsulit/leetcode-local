@@ -3,7 +3,8 @@ import fs from 'fs'
 import { convert } from 'html-to-text'
 import { Question, getQuestion } from './leetcodeApi'
 
-const dir = path.resolve(__dirname, '../src')
+const rootDir = process.env['INIT_CWD'] || ''
+const dir = path.resolve(rootDir, '/src')
 
 
 const createQuestionFile = (question: Question, dir: string) => {
