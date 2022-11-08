@@ -44,7 +44,6 @@ const getQuestion = async (slug: string): Promise<Question> => {
   }` 
   
   try {
-    console.log('requesting question')
     const response = await fetch('https://leetcode.com/graphql', {
       method: 'POST',
       headers: {

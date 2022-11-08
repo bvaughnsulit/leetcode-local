@@ -1,17 +1,15 @@
 {
   "name": "leetcode-local",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "./dist/index.js",
   "bin": {
-    "leetcode-local": "./bin/index.js"
+    "leetcode-local": "./dist/bin/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./globals": "./globals.js"
+    "./globals": "./dist/globals.js"
   },
   "author": "",
   "license": "ISC",

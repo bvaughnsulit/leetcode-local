@@ -30,7 +30,7 @@ exports.submit = void 0;
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const dotenv = __importStar(require("dotenv"));
 const promises_1 = require("timers/promises");
-const leetcodeApi_1 = require("./leetcodeApi");
+const leetcode_api_1 = require("./leetcode-api");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 dotenv.config();
@@ -137,8 +137,7 @@ const submit = async (problem) => {
     if (problem.length > 0) {
         const slug = problem.trim();
         const code = getFile(`${dir}/${slug}.ts`);
-        const question = await (0, leetcodeApi_1.getQuestion)(slug);
-        console.log(question);
+        const question = await (0, leetcode_api_1.getQuestion)(slug);
         const submissionId = await submitCode(slug, question.questionId, code);
         const submissionDetails = await getSubmissionResult(submissionId);
         displayResults(submissionDetails);

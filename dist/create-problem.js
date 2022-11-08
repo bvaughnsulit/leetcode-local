@@ -7,8 +7,8 @@ exports.createProblem = exports.getQuestion = void 0;
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const html_to_text_1 = require("html-to-text");
-const leetcodeApi_1 = require("./leetcodeApi");
-Object.defineProperty(exports, "getQuestion", { enumerable: true, get: function () { return leetcodeApi_1.getQuestion; } });
+const leetcode_api_1 = require("./leetcode-api");
+Object.defineProperty(exports, "getQuestion", { enumerable: true, get: function () { return leetcode_api_1.getQuestion; } });
 const rootDir = process.cwd() || '';
 const dir = path_1.default.resolve(rootDir, './src');
 const createQuestionFile = (question, dir) => {
@@ -47,7 +47,7 @@ test('', () => {
 const createProblem = async (problem) => {
     if (problem.length > 0) {
         const slug = problem.trim();
-        const question = await (0, leetcodeApi_1.getQuestion)(slug);
+        const question = await (0, leetcode_api_1.getQuestion)(slug);
         createQuestionFile(question, dir);
         createQuestionTestFile(question, dir);
         console.log('new files created successfully');

@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { convert } from 'html-to-text'
-import { Question, getQuestion } from './leetcodeApi'
+import { Question, getQuestion } from './leetcode-api'
 
 const rootDir = process.cwd() || ''
 const dir = path.resolve(rootDir, './src')

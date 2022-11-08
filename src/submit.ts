@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import * as dotenv from 'dotenv'
 import { setTimeout } from 'timers/promises'
-import { Question, getQuestion } from './leetcodeApi'
+import { Question, getQuestion } from './leetcode-api'
 import fs from 'fs'
 import path from 'path'
 
@@ -135,7 +135,6 @@ const submit = async (problem: string) => {
     const code = getFile(`${dir}/${slug}.ts`)
 
     const question: Question = await getQuestion(slug)
-    console.log(question)
     const submissionId = await submitCode(slug, question.questionId, code)
     const submissionDetails = await getSubmissionResult(submissionId)
     displayResults(submissionDetails)
