@@ -132,7 +132,7 @@ const submit = async (problem: string) => {
   if (problem.length > 0) { 
     const slug = problem.trim()
 
-    const code = getFile(dir + slug + '.ts')
+    const code = getFile(`${dir}/${slug}.ts`)
 
     const question: Question = await getQuestion(slug)
     const submissionId = await submitCode(slug, question.questionId, code)
